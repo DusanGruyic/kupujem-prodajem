@@ -2,9 +2,9 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pom/modules/login";
 import { GoogleAuthPage } from "../pom/modules/googleLogin";
 import { DashboardPage } from "../pom/modules/dashboardPage";
-import { LOGIN_PAYLOAD, ADVERTISEMENT_PAYLOAD } from "../fixtures/payloadData";
+import { LOGIN_PAYLOAD } from "../fixtures/payloadData";
 
-test.describe("Dashboard Tests", () => {
+test.describe("Filtering Tests", () => {
   let loginPage;
   let googleAuthPage;
   let dashboardPage;
@@ -24,11 +24,20 @@ test.describe("Dashboard Tests", () => {
     dashboardPage = new DashboardPage(page);
   });
 
-  test("Should create new advertisement successfully", async () => {
-    await expect(dashboardPage.addAdvertisementButton).toBeVisible();
-    await dashboardPage.createAdvertisement(ADVERTISEMENT_PAYLOAD);
-    await expect(
-      page.locator('span:has-text("Uspešno ste postavili oglas")')
-    ).toBeVisible();
+  test("Should filter cars by price range", async ({ page }) => {
+    await dashboardPage.carLink.click();
+    await dashboardPage.priceDropdown.click();
+
+    await dashboardPage.priceFrom.fill("5000");
+    await dashboardPage.priceTo.fill("15000");
+    await dashboardPage.applyFilter.click();
+    await expect(dashboardPage.priceDropdown).toContainText("5.000 - 15.000");
+  });
+
+  test("Should sort items by price", async ({ page }) => {
+    await dashboardPage.carLink.click();
+    await dashboardPage.sortFilter.click();
+    await page.getByText("Cena rastuće").click();
+    await expect(dashboardPage.sortFilter).toContainText("Cena rastuće");
   });
 });

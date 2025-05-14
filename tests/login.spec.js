@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pom/modules/login";
 import { GoogleAuthPage } from "../pom/modules/googleLogin";
-import { LOGIN_PAYLOAD } from "../fixtures/userData";
+import { LOGIN_PAYLOAD } from "../fixtures/payloadData";
 import { DashboardPage } from "../pom/modules/dashboardPage";
 
 test.describe("Login Tests", () => {
